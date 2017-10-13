@@ -53,6 +53,8 @@ class EloquentCheckerTest extends \PHPUnit_Framework_TestCase
     {
         $credentials = array('username' => 'rougin', 'password' => 'rougin');
 
+        $this->checker->hashed(false);
+
         $authentication = new Authentication;
 
         $result = $authentication->authenticate($this->checker, $credentials);
