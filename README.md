@@ -20,12 +20,12 @@ $ composer require rougin/authsum
 ## Usage
 
 ``` php
-$users = [
-    [ 'username' => 'rougin', 'password' => 'rougin' ],
-    [ 'username' => 'roycee', 'password' => 'roycee' ],
-    [ 'username' => 'gutibb', 'password' => 'gutibb' ],
-    [ 'username' => 'testtt', 'password' => 'testtt' ],
-];
+$users = array();
+
+$users[] = [ 'username' => 'rougin', 'password' => 'rougin' ];
+$users[] = [ 'username' => 'roycee', 'password' => 'roycee' ];
+$users[] = [ 'username' => 'gutibb', 'password' => 'gutibb' ];
+$users[] = [ 'username' => 'testtt', 'password' => 'testtt' ];
 
 $checker = new Rougin\Authsum\ArrayChecker($users); // Used for checking the data.
 
