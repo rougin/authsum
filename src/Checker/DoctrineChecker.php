@@ -2,6 +2,7 @@
 
 namespace Rougin\Authsum\Checker;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 
 /**
@@ -28,10 +29,12 @@ class DoctrineChecker extends AbstractChecker implements CheckerInterface
     protected $manager;
 
     /**
+     * Initializes the checker instance.
+     *
      * @param \Doctrine\ORM\EntityManager $manager
      * @param string                      $entity
      */
-    public function __construct(\Doctrine\ORM\EntityManager $manager, $entity)
+    public function __construct(EntityManager $manager, $entity)
     {
         $this->entity = $entity;
 
@@ -44,7 +47,7 @@ class DoctrineChecker extends AbstractChecker implements CheckerInterface
      * @param  string $accessor
      * @return self
      */
-    public function accessor($accessor = 'getPassword')
+    public function accessor($accessor)
     {
         $this->accessor = $accessor;
 
@@ -54,25 +57,18 @@ class DoctrineChecker extends AbstractChecker implements CheckerInterface
     /**
      * Checks if exists in the said collection.
      *
-     * @throws \Doctrine\ORM\NoResultException
-     *
      * @param  array $credentials
      * @return boolean|mixed
+     *
+     * @throws \Doctrine\ORM\NoResultException
      */
     public function check(array $credentials)
     {
-        $repository = $this->manager->getRepository($this->entity);
-
-        $builder = $repository->createQueryBuilder('x');
-
-        $fields = array_keys($credentials);
-        $values = array_values($credentials);
-
-        $builder->where('x.' . $fields[0] . ' = :' . $fields[0]);
-        $builder->setParameter($fields[0], $values[0]);
+        list($builder, $fields, $values) = $this->prepare($credentials);
 
         if ($this->hashed === false) {
-            $builder->andWhere('x.' . $fields[1] . ' = :' . $fields[1]);
+            $builder->andWhere(sprintf('x.%s = :%s', $fields[1], $fields[1]));
+
             $builder->setParameter($fields[1], $values[1]);
 
             return $builder->getQuery()->getSingleResult();
@@ -82,10 +78,33 @@ class DoctrineChecker extends AbstractChecker implements CheckerInterface
     }
 
     /**
+     * Prepares the QueryBuilder instance.
+     *
+     * @param  array $credentials
+     * @return array
+     */
+    protected function prepare(array $credentials)
+    {
+        $repository = $this->manager->getRepository($this->entity);
+
+        $builder = $repository->createQueryBuilder('x');
+
+        $fields = array_keys($credentials);
+
+        $values = array_values($credentials);
+
+        $builder->where('x.' . $fields[0] . ' = :' . $fields[0]);
+
+        $builder->setParameter($fields[0], $values[0]);
+
+        return array($builder, $fields, $values);
+    }
+
+    /**
      * Checks the password value against the hashed result.
      *
      * @param  \Doctrine\ORM\QueryBuilder $builder
-     * @param  boolean                           $value
+     * @param  boolean                    $value
      * @return boolean|mixed
      */
     protected function verify(QueryBuilder $builder, $value)
@@ -94,6 +113,6 @@ class DoctrineChecker extends AbstractChecker implements CheckerInterface
 
         $checked = password_verify($value, $result->{$this->accessor}());
 
-        return ($checked === true) ? $result : false;
+        return $checked === true ? $result : false;
     }
 }

@@ -10,17 +10,23 @@ namespace Rougin\Authsum\Checker;
  */
 class EloquentChecker extends AbstractChecker implements CheckerInterface
 {
+    const ELOQUENT = 'Illuminate\Database\Eloquent\Model';
+
     /**
      * @var \Illuminate\Database\Eloquent\Model
      */
     protected $model;
 
     /**
+     * Initializes the checker instance.
+     *
      * @param \Illuminate\Database\Eloquent\Model|string $model
      */
     public function __construct($model)
     {
-        $this->model = is_string($model) ? new $model : $model;
+        is_string($model) && $model = new $model;
+
+        $this->model = $model;
     }
 
     /**
@@ -31,36 +37,34 @@ class EloquentChecker extends AbstractChecker implements CheckerInterface
      */
     public function check(array $credentials)
     {
-        $class = 'Illuminate\Database\Eloquent\Model';
+        $result = $this->model->where($credentials)->first();
 
-        $item = $this->model->where($credentials)->first();
+        $this->hashed && $result = $this->verify($credentials);
 
-        $result = $this->verify($this->model, $credentials, $item);
-
-        return (is_a($result, $class)) ? $result : false;
+        return is_a($result, self::ELOQUENT) ? $result : false;
     }
 
     /**
      * Checks the hash of the password if it is hashed.
      *
-     * @param  \Illuminate\Database\Eloquent\Model $model
-     * @param  array                               $data
-     * @param  boolean|mixed                       $result
+     * @param  array $credentials
      * @return boolean|mixed
      */
-    protected function verify($model, $data, $result)
+    protected function verify($credentials)
     {
-        list($keys, $values) = array(array_keys($data), array_values($data));
+        $columns = array_keys($credentials);
 
-        if ($this->hashed === true) {
-            $item = $model->where(array($keys[0] => $values[0]))->first();
+        $username = array($columns[0] => $credentials[$columns[0]]);
 
-            if (is_null($item) === false) {
-                $checked = password_verify($values[1], $item->{$keys[1]});
+        $result = $this->model->where($username)->first();
 
-                $result = ($checked === true) ? $item : false;
-            }
-        }
+        $password = $credentials[$columns[1]];
+
+        $hashed = $result->{$columns[1]};
+
+        $checked = password_verify($password, $hashed);
+
+        $checked === false && $result = false;
 
         return $result;
     }

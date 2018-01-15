@@ -1,6 +1,6 @@
 <?php
 
-namespace Rougin\Authsum\Fixtures\Models;
+namespace Rougin\Authsum\Fixture\Models;
 
 /**
  * Doctrine Model

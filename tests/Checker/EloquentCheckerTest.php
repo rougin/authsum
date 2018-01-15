@@ -2,7 +2,9 @@
 
 namespace Rougin\Authsum\Checker;
 
+use Illuminate\Database\Capsule\Manager;
 use Rougin\Authsum\Authentication;
+use Rougin\Authsum\Fixture\Authenticate;
 
 /**
  * Eloquent Checker Test
@@ -20,7 +22,7 @@ class EloquentCheckerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $model = 'Rougin\Authsum\Fixtures\Models\EloquentModel';
+    protected $model = 'Rougin\Authsum\Fixture\Models\EloquentModel';
 
     /**
      * Sets up Eloquent and the checker.
@@ -29,13 +31,17 @@ class EloquentCheckerTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        class_exists('Illuminate\Database\Seeder') || $this->markTestSkipped('Eloquent is not installed');
+        $exists = class_exists('Illuminate\Database\Seeder');
 
-        $capsule = new \Illuminate\Database\Capsule\Manager;
+        $message = 'Eloquent ORM is not installed';
+
+        $exists || $this->markTestSkipped($message);
+
+        $capsule = new Manager;
 
         $connection = array('driver' => 'sqlite', 'prefix' => '');
 
-        $connection['database'] = __DIR__ . '/../Fixtures/Database.sqlite';
+        $connection['database'] = __DIR__ . '/../Fixture/Database.sqlite';
 
         $capsule->addConnection($connection);
 
@@ -45,7 +51,7 @@ class EloquentCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests the CheckerInterface with success method.
+     * Tests CheckerInterface::success.
      *
      * @return void
      */
@@ -63,11 +69,11 @@ class EloquentCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests the CheckerInterface with success method and hashing.
+     * Tests CheckerInterface::success with hashing.
      *
      * @return void
      */
-    public function testSuccessMethodAndHashing()
+    public function testSuccessMethodWithHashing()
     {
         $credentials = array('username' => 'test', 'password' => 'test');
 
@@ -81,7 +87,7 @@ class EloquentCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests the CheckerInterface with error method.
+     * Tests CheckerInterface::error.
      *
      * @return void
      */
@@ -89,7 +95,7 @@ class EloquentCheckerTest extends \PHPUnit_Framework_TestCase
     {
         $credentials = array('username' => 'test', 'password' => 'rougin');
 
-        $authentication = new \Rougin\Authsum\Fixtures\Authenticate;
+        $authentication = new Authenticate;
 
         $result = $authentication->authenticate($this->checker, $credentials);
 
@@ -97,7 +103,25 @@ class EloquentCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests the CheckerInterface with validate method.
+     * Tests CheckerInterface::error with hashing.
+     *
+     * @return void
+     */
+    public function testErrorMethodWithHashing()
+    {
+        $credentials = array('username' => 'test', 'password' => 'rougin');
+
+        $this->checker->hashed(true);
+
+        $authentication = new Authentication;
+
+        $result = $authentication->authenticate($this->checker, $credentials);
+
+        $this->assertEquals(Authentication::NOT_FOUND, $result);
+    }
+
+    /**
+     * Tests CheckerInterface::validate.
      *
      * @return void
      */
@@ -105,7 +129,7 @@ class EloquentCheckerTest extends \PHPUnit_Framework_TestCase
     {
         $credentials = array('username' => 'rougin', 'password' => 'rougin');
 
-        $authentication = new \Rougin\Authsum\Fixtures\Authenticate;
+        $authentication = new Authenticate;
 
         $authentication->validation(false);
 

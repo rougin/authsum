@@ -18,9 +18,16 @@ class PdoChecker extends AbstractChecker implements CheckerInterface
     /**
      * @var string
      */
+    protected $query = 'SELECT * FROM %s WHERE %s';
+
+    /**
+     * @var string
+     */
     protected $table;
 
     /**
+     * Initializes the checker instance.
+     *
      * @param \PDO   $pdo
      * @param string $table
      */
@@ -39,44 +46,43 @@ class PdoChecker extends AbstractChecker implements CheckerInterface
      */
     public function check(array $credentials)
     {
-        $query = 'SELECT * FROM %s WHERE %s';
-
         list($data, $table) = array(array(), $this->table);
 
-        if ($this->hashed === false) {
-            foreach ($credentials as $key => $value) {
-                $parameter = "$key = '$value'";
+        foreach ($credentials as $key => $value) {
+            $parameter = "$key = '$value'";
 
-                array_push($data, $parameter);
-            }
-
-            $query = sprintf($query, $table, implode(' AND ', $data));
-
-            $statement = $this->pdo->query($query);
-
-            return $statement->fetch(\PDO::FETCH_ASSOC);
+            $data[] = (string) $parameter;
         }
 
-        return $this->verify($query, $credentials);
+        $query = sprintf($this->query, $table, implode(' AND ', $data));
+
+        $result = $this->pdo->query($query)->fetch(\PDO::FETCH_ASSOC);
+
+        $this->hashed === true && $result = $this->verify($credentials);
+
+        return $result;
     }
 
     /**
      * Checks the password value against the hashed result.
      *
-     * @param  string $query
-     * @param  array  $credentials
+     * @param  array $credentials
      * @return boolean|mixed
      */
-    protected function verify($query, array $credentials)
+    protected function verify(array $credentials)
     {
-        list($fields, $values) = array(array_keys($credentials), array_values($credentials));
+        $fields = array_keys($credentials);
 
-        $query = sprintf($query, $this->table, $fields[0] . ' = "' . $values[0] . '"');
+        $where = $fields[0] . ' = "' . $credentials[$fields[0]] . '"';
 
-        $statement = $this->pdo->query($query);
+        $query = sprintf($this->query, $this->table, $where);
 
-        $item = $statement->fetch(\PDO::FETCH_ASSOC);
+        $item = $this->pdo->query($query)->fetch(\PDO::FETCH_ASSOC);
 
-        return password_verify($values[1], $item[$fields[1]]) ? $item : false;
+        $password = $credentials[$fields[1]];
+
+        $verified = password_verify($password, $item[$fields[1]]);
+
+        return $verified === true ? $item : false;
     }
 }

@@ -6,12 +6,12 @@ use Rougin\Authsum\Authentication;
 use Rougin\Authsum\Fixture\Authenticate;
 
 /**
- * Array Checker Test
+ * Abstract Test Case
  *
  * @package Authsum
  * @author  Rougin Royce Gutib <rougingutib@gmail.com>
  */
-class ArrayCheckerTest extends \PHPUnit_Framework_TestCase
+class AbstractTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Rougin\Authsum\Checker\CheckerInterface
@@ -19,22 +19,13 @@ class ArrayCheckerTest extends \PHPUnit_Framework_TestCase
     protected $checker;
 
     /**
-     * Setups the specified instances.
+     * Sets up the checker instance.
      *
      * @return void
      */
     public function setUp()
     {
-        $items = array();
-
-        array_push($items, array('username' => 'rougin', 'password' => 'rougin'));
-        array_push($items, array('username' => 'roycee', 'password' => 'roycee'));
-        array_push($items, array('username' => 'gutibb', 'password' => 'gutibb'));
-        array_push($items, array('username' => 'testtt', 'password' => 'testtt'));
-        array_push($items, array('username' => 'rougin', 'password' => 'gutibb'));
-        array_push($items, array('username' => 'hashed', 'password' => '$2y$10$WNqwC2eb5WUtvOa5x9sxTuTNT8A.8VBebmZpuPMQLUUJQszylByg6'));
-
-        $this->checker = new ArrayChecker($items);
+        $this->markTestSkipped('No CheckerInterface defined.');
     }
 
     /**
@@ -44,15 +35,15 @@ class ArrayCheckerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSuccessMethod()
     {
-        $credentials = array('username' => 'rougin', 'password' => 'gutibb');
-
         $authentication = new Authentication;
 
         $this->checker->hashed(false);
 
-        $result = $authentication->authenticate($this->checker, $credentials);
+        $expected = array('username' => 'rougin', 'password' => 'gutibb');
 
-        $this->assertEquals($credentials, $result);
+        $result = $authentication->authenticate($this->checker, $expected);
+
+        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -64,13 +55,15 @@ class ArrayCheckerTest extends \PHPUnit_Framework_TestCase
     {
         $credentials = array('username' => 'hashed', 'password' => 'rougin');
 
-        $hashed = array('username' => 'hashed', 'password' => '$2y$10$WNqwC2eb5WUtvOa5x9sxTuTNT8A.8VBebmZpuPMQLUUJQszylByg6');
+        $password = '$2y$10$WNqwC2eb5WUtvOa5x9sxTuTNT8A.8VBebmZpuPMQLUUJQszylByg6';
 
         $authentication = new Authentication;
 
+        $expected = array('username' => 'hashed', 'password' => $password);
+
         $result = $authentication->authenticate($this->checker, $credentials);
 
-        $this->assertEquals($hashed, $result);
+        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -80,13 +73,35 @@ class ArrayCheckerTest extends \PHPUnit_Framework_TestCase
      */
     public function testErrorMethod()
     {
+        $authentication = new Authenticate;
+
         $credentials = array('username' => 'testtt', 'password' => 'rougin');
 
-        $authentication = new Authenticate;
+        $expected = Authentication::NOT_FOUND;
 
         $result = $authentication->authenticate($this->checker, $credentials);
 
-        $this->assertEquals(Authentication::NOT_FOUND, $result);
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Tests CheckerInterface::error with hashing.
+     *
+     * @return void
+     */
+    public function testErrorMethodWithHashing()
+    {
+        $authentication = new Authentication;
+
+        $this->checker->hashed(true);
+
+        $credentials = array('username' => 'test', 'password' => 'rougin');
+
+        $expected = Authentication::NOT_FOUND;
+
+        $result = $authentication->authenticate($this->checker, $credentials);
+
+        $this->assertEquals($expected, $result);
     }
 
     /**
@@ -96,14 +111,16 @@ class ArrayCheckerTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateMethod()
     {
-        $credentials = array('username' => 'test', 'password' => 'rougin');
-
         $authentication = new Authenticate;
 
         $authentication->validation(false);
 
+        $credentials = array('username' => 'test', 'password' => 'rougin');
+
+        $expected = Authentication::INVALID;
+
         $result = $authentication->authenticate($this->checker, $credentials);
 
-        $this->assertEquals(Authentication::INVALID, $result);
+        $this->assertEquals($expected, $result);
     }
 }

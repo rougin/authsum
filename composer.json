@@ -1,7 +1,7 @@
 {
     "name": "rougin/authsum",
-    "description": "A very simple authentication library for PHP.",
-    "keywords": ["authentication", "authsum", "simple auth"],
+    "description": "Yet another PHP authentication library.",
+    "keywords": ["authentication", "authsum", "php-library"],
     "license": "MIT",
     "authors": [
         {
@@ -26,6 +26,14 @@
     "autoload-dev": {
         "psr-4": {
             "Rougin\\Authsum\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
         }
     }
 }

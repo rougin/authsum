@@ -1,6 +1,6 @@
 <?php
 
-namespace Rougin\Authsum\Fixtures;
+namespace Rougin\Authsum\Fixture;
 
 /**
  * Authenticate

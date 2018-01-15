@@ -3,6 +3,7 @@
 namespace Rougin\Authsum\Checker;
 
 use Rougin\Authsum\Authentication;
+use Rougin\Authsum\Fixture\Authenticate;
 
 /**
  * PDO Checker Test
@@ -26,7 +27,7 @@ class PdoCheckerTest extends \PHPUnit_Framework_TestCase
     {
         $path = __DIR__ . DIRECTORY_SEPARATOR;
 
-        $sqlite = str_replace('Checker', 'Fixtures', $path);
+        $sqlite = str_replace('Checker', 'Fixture', $path);
 
         $pdo = new \PDO('sqlite:' . $sqlite . 'Database.sqlite');
 
@@ -36,7 +37,7 @@ class PdoCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests the CheckerInterface with success method.
+     * Tests CheckerInterface::success.
      *
      * @return void
      */
@@ -54,11 +55,11 @@ class PdoCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests the CheckerInterface with success method and hashing.
+     * Tests CheckerInterface::success with hashing.
      *
      * @return void
      */
-    public function testSuccessMethodAndHashing()
+    public function testSuccessMethodWithHashing()
     {
         $credentials = array('username' => 'test', 'password' => 'test');
 
@@ -70,7 +71,7 @@ class PdoCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests the CheckerInterface with error method.
+     * Tests CheckerInterface::error.
      *
      * @return void
      */
@@ -78,7 +79,7 @@ class PdoCheckerTest extends \PHPUnit_Framework_TestCase
     {
         $credentials = array('username' => 'test', 'password' => 'rougin');
 
-        $authentication = new \Rougin\Authsum\Fixtures\Authenticate;
+        $authentication = new Authenticate;
 
         $result = $authentication->authenticate($this->checker, $credentials);
 
@@ -86,7 +87,7 @@ class PdoCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests the CheckerInterface with validate method.
+     * Tests CheckerInterface::validate.
      *
      * @return void
      */
@@ -94,7 +95,7 @@ class PdoCheckerTest extends \PHPUnit_Framework_TestCase
     {
         $credentials = array('username' => 'rougin', 'password' => 'rougin');
 
-        $authentication = new \Rougin\Authsum\Fixtures\Authenticate;
+        $authentication = new Authenticate;
 
         $authentication->validation(false);
 

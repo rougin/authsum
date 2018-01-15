@@ -7,7 +7,7 @@
 [![Quality Score][ico-code-quality]][link-code-quality]
 [![Total Downloads][ico-downloads]][link-downloads]
 
-A very simple authentication library for PHP.
+Yet another PHP authentication library.
 
 ## Install
 
@@ -20,26 +20,27 @@ $ composer require rougin/authsum
 ## Usage
 
 ``` php
-$users = [
-    [ 'username' => 'rougin', 'password' => 'rougin' ],
-    [ 'username' => 'roycee', 'password' => 'roycee' ],
-    [ 'username' => 'gutibb', 'password' => 'gutibb' ],
-    [ 'username' => 'testtt', 'password' => 'testtt' ],
-];
+use Rougin\Authsum\ArrayChecker;
+use Rougin\Authsum\Authentication;
 
-$checker = new Rougin\Authsum\ArrayChecker($users); // Used for checking the data.
+$users = array();
+
+$users[] = array('username' => 'rougin', 'password' => 'rougin');
+$users[] = array('username' => 'roycee', 'password' => 'roycee');
+$users[] = array('username' => 'gutibb', 'password' => 'gutibb');
+$users[] = array('username' => 'testtt', 'password' => 'testtt');
+
+$checker = new ArrayChecker($users); // Used for checking the data.
 
 $checker->hashed(false); // Disables checking of hashed password.
 
-$authentication = new Rougin\Authsum\Authentication;
-
-$credentials = [ 'username' => 'rougin', 'password' => 'rougin' ];
+$credentials = array('username' => 'rougin', 'password' => 'rougin');
 
 // It validates the credentials first in validate() method.
 // Then it returns the success() method if authenticated properly.
 // If it fails after checking, then it returns the error() method.
 // Class "Authentication" can also be extended, see below.
-$authentication->authenticate($checker, $credentials);
+(new Authentication)->authenticate($checker, $credentials);
 ```
 
 ### Extendable methods
@@ -49,18 +50,18 @@ class Authentication extends \Rougin\Authsum\Authentication
 {
     protected function success($match)
     {
-        // Do something like setting session/user, etc. ...
+        // Setting session variables or current user, etc.
     }
 
     protected function error($type = self::NOT_FOUND)
     {
-        // Do something like a redirect, throw exception, etc. ...
+        // A HTTP 302 redirection, throw exception, etc.
         // If the validation fails, it will go here with a $type of "INVALID"
     }
 
     protected function validate(array $credentials)
     {
-        // Do something like CSRF, token checking, etc. ...
+        // CSRF, token checking, etc.
     }
 }
 ```
@@ -84,10 +85,6 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 $ composer require doctrine/orm illuminate/database --dev
 $ composer test
 ```
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
 ## Security
 

@@ -2,7 +2,10 @@
 
 namespace Rougin\Authsum\Checker;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Setup;
 use Rougin\Authsum\Authentication;
+use Rougin\Authsum\Fixture\Authenticate;
 
 /**
  * Doctrine Checker Test
@@ -20,7 +23,7 @@ class DoctrineCheckerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $model = 'Rougin\Authsum\Fixtures\Models\DoctrineModel';
+    protected $model = 'Rougin\Authsum\Fixture\Models\DoctrineModel';
 
     /**
      * Sets up Doctrine and the checker.
@@ -29,21 +32,25 @@ class DoctrineCheckerTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        class_exists('Doctrine\ORM\Query') || $this->markTestSkipped('Doctrine ORM is not installed');
+        $exists = class_exists('Doctrine\ORM\Query');
 
-        $config = \Doctrine\ORM\Tools\Setup::createAnnotationMetadataConfiguration(array(__DIR__), true);
+        $message = 'Doctrine ORM is not installed';
+
+        $exists || $this->markTestSkipped($message);
+
+        $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__), true);
 
         $connection = array('driver' => 'pdo_sqlite', 'charset' => 'utf8');
 
-        $connection['path'] = __DIR__ . '/../Fixtures/Database.sqlite';
+        $connection['path'] = __DIR__ . '/../Fixture/Database.sqlite';
 
-        $manager = \Doctrine\ORM\EntityManager::create($connection, $config);
+        $manager = EntityManager::create($connection, $config);
 
         $this->checker = new DoctrineChecker($manager, $this->model);
     }
 
     /**
-     * Tests the CheckerInterface with success method.
+     * Tests CheckerInterface::success.
      *
      * @return void
      */
@@ -61,11 +68,11 @@ class DoctrineCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests the CheckerInterface with success method and hashing.
+     * Tests CheckerInterface::success with hashing.
      *
      * @return void
      */
-    public function testSuccessMethodAndHashing()
+    public function testSuccessMethodWithHashing()
     {
         $credentials = array('username' => 'test', 'password' => 'test');
 
@@ -77,7 +84,7 @@ class DoctrineCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests the CheckerInterface with error method.
+     * Tests CheckerInterface::error.
      *
      * @return void
      */
@@ -85,7 +92,7 @@ class DoctrineCheckerTest extends \PHPUnit_Framework_TestCase
     {
         $credentials = array('username' => 'test', 'password' => 'rougin');
 
-        $authentication = new \Rougin\Authsum\Fixtures\Authenticate;
+        $authentication = new Authenticate;
 
         $result = $authentication->authenticate($this->checker, $credentials);
 
@@ -93,7 +100,7 @@ class DoctrineCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests the CheckerInterface with validate method.
+     * Tests CheckerInterface::validate.
      *
      * @return void
      */
@@ -101,7 +108,7 @@ class DoctrineCheckerTest extends \PHPUnit_Framework_TestCase
     {
         $credentials = array('username' => 'rougin', 'password' => 'rougin');
 
-        $authentication = new \Rougin\Authsum\Fixtures\Authenticate;
+        $authentication = new Authenticate;
 
         $authentication->validation(false);
 
@@ -111,7 +118,7 @@ class DoctrineCheckerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests the CheckerInterface with success method using accessor.
+     * Tests CheckerInterface::success using accessor.
      *
      * @return void
      */

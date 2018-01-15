@@ -16,6 +16,8 @@ class ArrayChecker extends AbstractChecker implements CheckerInterface
     protected $items = array();
 
     /**
+     * Initializes the checker instance.
+     *
      * @param array $items
      */
     public function __construct(array $items)
@@ -31,22 +33,42 @@ class ArrayChecker extends AbstractChecker implements CheckerInterface
      */
     public function check(array $credentials)
     {
-        list($fields, $values) = array(array_keys($credentials), array_values($credentials));
+        $index = array_search($credentials, $this->items);
 
-        $columns = array_map(function ($item) use ($fields) {
-            $column = $fields[0];
+        $selected = (array) $this->items[$index];
 
-            return $item[$column];
-        }, $this->items);
+        $result = $index !== false ? $selected : false;
 
-        $index = array_search($credentials[$fields[0]], $columns);
+        $this->hashed && $result = $this->verify($credentials);
 
-        if ($this->hashed === true) {
-            $verified = password_verify($values[1], $this->items[$index][$fields[1]]);
-        } else {
-            $verified = $this->items[$index][$fields[1]] === $credentials[$fields[1]];
+        return $result;
+    }
+
+    /**
+     * Checks the credentials with password_verify().
+     *
+     * @param  array   $credentials
+     * @param  boolean $result
+     * @return boolean|mixed
+     */
+    protected function verify($credentials, $result = false)
+    {
+        $fields = array_keys($credentials);
+
+        $username = $credentials[$fields[0]];
+
+        $password = $credentials[$fields[1]];
+
+        foreach ((array) $this->items as $item) {
+            $hashed = $item[$fields[1]];
+
+            $verified = password_verify($password, $hashed);
+
+            $exists = $username === $item[$fields[0]];
+
+            ($verified && $exists) && $result = $item;
         }
 
-        return ($verified) ? $this->items[$index] : false;
+        return $result;
     }
 }
