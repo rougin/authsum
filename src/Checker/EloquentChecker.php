@@ -52,20 +52,18 @@ class EloquentChecker extends AbstractChecker implements CheckerInterface
      */
     protected function verify($credentials)
     {
-        $columns = array_keys($credentials);
+        $columns = (array) array_keys($credentials);
 
         $username = array($columns[0] => $credentials[$columns[0]]);
 
         $result = $this->model->where($username)->first();
 
-        $password = $credentials[$columns[1]];
+        $password = (string) $credentials[$columns[1]];
 
-        $hashed = $result->{$columns[1]};
+        $hashed = $result ? $result->{$columns[1]} : '';
 
         $checked = password_verify($password, $hashed);
 
-        $checked === false && $result = false;
-
-        return $result;
+        return $checked !== false ? $result : false;
     }
 }
