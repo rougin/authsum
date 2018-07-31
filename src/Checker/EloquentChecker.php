@@ -24,9 +24,7 @@ class EloquentChecker extends AbstractChecker implements CheckerInterface
      */
     public function __construct($model)
     {
-        is_string($model) && $model = new $model;
-
-        $this->model = $model;
+        $this->model = is_string($model) ? new $model : $model;
     }
 
     /**
