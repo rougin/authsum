@@ -1,7 +1,7 @@
 # Authsum
 
 [![Latest Version on Packagist][ico-version]][link-packagist]
-[![Software License][ico-license]](LICENSE.md)
+[![Software License][ico-license]][link-license]
 [![Build Status][ico-travis]][link-travis]
 [![Coverage Status][ico-scrutinizer]][link-scrutinizer]
 [![Quality Score][ico-code-quality]][link-code-quality]
@@ -9,15 +9,15 @@
 
 Yet another PHP authentication library.
 
-## Install
+## Installation
 
-Via Composer
+Install `Authsum` via [Composer](https://getcomposer.org/):
 
 ``` bash
 $ composer require rougin/authsum
 ```
 
-## Usage
+## Basic Usage
 
 ``` php
 use Rougin\Authsum\ArrayChecker;
@@ -75,9 +75,9 @@ class Authentication extends \Rougin\Authsum\Authentication
 
 You can also create a new checker by implementing it in [CheckerInterface](src/Checker/CheckerInterface.php).
 
-## Change log
+## Changelog
 
-Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
+Please see [CHANGELOG][link-changelog] for more information what has changed recently.
 
 ## Testing
 
@@ -86,30 +86,26 @@ $ composer require doctrine/orm illuminate/database --dev
 $ composer test
 ```
 
-## Security
-
-If you discover any security related issues, please email rougingutib@gmail.com instead of using the issue tracker.
-
 ## Credits
 
-- [Rougin Royce Gutib][link-author]
-- [All Contributors][link-contributors]
+- [All contributors][link-contributors]
 
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+The MIT License (MIT). Please see [LICENSE][link-license] for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/rougin/authsum.svg?style=flat-square
-[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/rougin/authsum/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/rougin/authsum.svg?style=flat-square
 [ico-code-quality]: https://img.shields.io/scrutinizer/g/rougin/authsum.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/rougin/authsum.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/rougin/authsum.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/rougin/authsum/master.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/rougin/authsum.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/rougin/authsum
-[link-travis]: https://travis-ci.org/rougin/authsum
-[link-scrutinizer]: https://scrutinizer-ci.com/g/rougin/authsum/code-structure
+[link-changelog]: https://github.com/rougin/authsum/blob/master/CHANGELOG.md
 [link-code-quality]: https://scrutinizer-ci.com/g/rougin/authsum
+[link-contributors]: https://github.com/rougin/authsum/contributors
 [link-downloads]: https://packagist.org/packages/rougin/authsum
-[link-author]: https://github.com/rougin
-[link-contributors]: ../../contributors
+[link-license]: https://github.com/rougin/authsum/blob/master/LICENSE.md
+[link-packagist]: https://packagist.org/packages/rougin/authsum
+[link-scrutinizer]: https://scrutinizer-ci.com/g/rougin/authsum/code-structure
+[link-travis]: https://travis-ci.org/rougin/authsum
