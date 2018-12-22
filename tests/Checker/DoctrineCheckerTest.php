@@ -11,7 +11,7 @@ use Rougin\Authsum\Fixture\Authenticate;
  * Doctrine Checker Test
  *
  * @package Authsum
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class DoctrineCheckerTest extends \PHPUnit_Framework_TestCase
 {

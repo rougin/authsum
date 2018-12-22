@@ -6,7 +6,7 @@ namespace Rougin\Authsum\Fixture\Models;
  * Doctrine Model
  *
  * @package Authsum
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  *
  * @Entity @Table(name="users")
  */

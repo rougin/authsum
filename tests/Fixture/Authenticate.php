@@ -6,7 +6,7 @@ namespace Rougin\Authsum\Fixture;
  * Authenticate
  *
  * @package Authsum
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class Authenticate extends \Rougin\Authsum\Authentication
 {

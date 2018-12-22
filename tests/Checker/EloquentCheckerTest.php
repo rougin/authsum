@@ -10,7 +10,7 @@ use Rougin\Authsum\Fixture\Authenticate;
  * Eloquent Checker Test
  *
  * @package Authsum
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class EloquentCheckerTest extends \PHPUnit_Framework_TestCase
 {

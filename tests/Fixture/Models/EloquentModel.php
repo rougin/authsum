@@ -6,7 +6,7 @@ namespace Rougin\Authsum\Fixture\Models;
  * Eloquent Model
  *
  * @package Authsum
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class EloquentModel extends \Illuminate\Database\Eloquent\Model
 {

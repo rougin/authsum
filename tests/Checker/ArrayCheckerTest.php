@@ -9,7 +9,7 @@ use Rougin\Authsum\Fixture\Authenticate;
  * Array Checker Test
  *
  * @package Authsum
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class ArrayCheckerTest extends \PHPUnit_Framework_TestCase
 {

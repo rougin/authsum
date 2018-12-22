@@ -9,7 +9,7 @@ use Rougin\Authsum\Fixture\Authenticate;
  * Abstract Test Case
  *
  * @package Authsum
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class AbstractTestCase extends \PHPUnit_Framework_TestCase
 {

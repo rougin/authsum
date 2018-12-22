@@ -9,7 +9,7 @@ use Rougin\Authsum\Fixture\Authenticate;
  * PDO Checker Test
  *
  * @package Authsum
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class PdoCheckerTest extends \PHPUnit_Framework_TestCase
 {
