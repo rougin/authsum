@@ -9,7 +9,7 @@ use Doctrine\ORM\QueryBuilder;
  * Doctrine Checker
  *
  * @package Authsum
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class DoctrineChecker extends AbstractChecker implements CheckerInterface
 {
@@ -66,7 +66,8 @@ class DoctrineChecker extends AbstractChecker implements CheckerInterface
     {
         list($builder, $fields, $values) = $this->prepare($credentials);
 
-        if ($this->hashed === false) {
+        if ($this->hashed === false)
+        {
             $builder->andWhere(sprintf('x.%s = :%s', $fields[1], $fields[1]));
 
             $builder->setParameter($fields[1], $values[1]);

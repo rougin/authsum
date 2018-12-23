@@ -6,7 +6,7 @@ namespace Rougin\Authsum\Checker;
  * Array Checker
  *
  * @package Authsum
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class ArrayChecker extends AbstractChecker implements CheckerInterface
 {

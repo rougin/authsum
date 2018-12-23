@@ -6,7 +6,7 @@ namespace Rougin\Authsum\Checker;
  * Eloquent Checker
  *
  * @package Authsum
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class EloquentChecker extends AbstractChecker implements CheckerInterface
 {

@@ -6,7 +6,7 @@ namespace Rougin\Authsum\Checker;
  * PDO Checker
  *
  * @package Authsum
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 class PdoChecker extends AbstractChecker implements CheckerInterface
 {

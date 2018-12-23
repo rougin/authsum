@@ -6,7 +6,7 @@ namespace Rougin\Authsum\Checker;
  * Checker Interface
  *
  * @package Authsum
- * @author  Rougin Royce Gutib <rougingutib@gmail.com>
+ * @author  Rougin Gutib <rougingutib@gmail.com>
  */
 interface CheckerInterface
 {
