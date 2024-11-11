@@ -18,24 +18,22 @@ $ composer require rougin/authsum
 
 ## Basic usage
 
-Prior in using `Authsum`, a data source must be defined first (e.g, `PdoSource`):
+Prior in using `Authsum`, a data source must be defined first (e.g, `BasicSource`):
 
 ``` php
 // index.php
 
-use Rougin\Authsum\Source\PdoSource;
+use Rougin\Authsum\Source\BasicSource;
 
 // ...
 
-// Create a PDO instance... --------------
-$dsn = 'mysql:host=localhost;dbname=demo';
+$username = 'admin';
+$password = /** ... */;
 
-$pdo = new PDO($dsn, 'root', /** ... */);
-// ---------------------------------------
-
-// ...then pass it to the PdoSource ---
-$source = new PdoSource($pdo);
-// ------------------------------------
+// Check if the provided username and password data ---
+// matched from the given payload (e.g., $_POST) ------
+$source = new BasicSource($username, $password);
+// ----------------------------------------------------
 
 // ...
 ```
@@ -89,23 +87,51 @@ Sources in `Authsum` are PHP classes that provide user data. They are also used 
 ``` php
 // index.php
 
-use Rougin\Authsum\Source\SimpleSource;
+use Acme\Sources\SampleSource;
+use Rougin\Authsum\Authsum;
 
 // ...
 
-$users = array();
+// Initialize the source... ---
+$source = new SampleSource;
+// ----------------------------
 
-$users[] = array('username' => 'rougin', 'password' => 'rougin');
-$users[] = array('username' => 'roycee', 'password' => 'roycee');
-$users[] = array('username' => 'gutibb', 'password' => 'gutibb');
-$users[] = array('username' => 'testtt', 'password' => 'testtt');
+// ...then pass it to Authsum ---
+$auth = new Authsum($source);
+// ------------------------------
 
-$source = new SimpleSource($users);
+// The source will be used to check if ---
+// the provided payload matches in the ---
+// given payload ($_POST) from its source
+$valid = $auth->isValid($_POST);
+// ---------------------------------------
 
 // ...
 ```
 
-Although the usage of the `PdoSource` class is introduced from the `Basic Usage` section, the `setTableName` method can also be used to specify its database table name:
+Besides from `BasicSource`, another available source that can be used is `PdoSource` which uses [PDO](https://www.php.net/manual/en/intro.pdo.php) to interact with a database:
+
+``` php
+// index.php
+
+use Rougin\Authsum\Source\PdoSource;
+
+// ...
+
+// Create a PDO instance... --------------
+$dsn = 'mysql:host=localhost;dbname=demo';
+
+$pdo = new PDO($dsn, 'root', /** ... */);
+// ---------------------------------------
+
+// ...then pass it to the PdoSource ---
+$source = new PdoSource($pdo);
+// ------------------------------------
+
+// ...
+```
+
+The `setTableName` method can also be used to specify its database table name:
 
 ``` php
 // index.php
