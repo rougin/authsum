@@ -87,14 +87,17 @@ Sources in `Authsum` are PHP classes that provide user data. They are also used 
 ``` php
 // index.php
 
-use Acme\Sources\SampleSource;
 use Rougin\Authsum\Authsum;
+use Rougin\Authsum\Source\BasicSource;
 
 // ...
 
-// Initialize the source... ---
-$source = new SampleSource;
-// ----------------------------
+// Initialize the source... --------------------
+$username = 'admin';
+$password = /** ... */;
+
+$source = new BasicSource($username, $password);
+// ---------------------------------------------
 
 // ...then pass it to Authsum ---
 $auth = new Authsum($source);
@@ -108,6 +111,8 @@ $valid = $auth->isValid($_POST);
 
 // ...
 ```
+
+#### `PdoSource`
 
 Besides from `BasicSource`, another available source that can be used is `PdoSource` which uses [PDO](https://www.php.net/manual/en/intro.pdo.php) to interact with a database:
 
@@ -182,6 +187,38 @@ SELECT u.* FROM users u WHERE u.username = ?
 SELECT u.* FROM users u WHERE u.username = ? AND u.type = ?
 ```
 
+#### `JwtSource`
+
+The `JwtSource` class is a special class checks the authentication of a user using [JSON Web Token](https://en.wikipedia.org/wiki/JSON_Web_Token):
+
+``` php
+// index.php
+
+use Rougin\Authsum\Source\JwtSource;
+
+// ...
+
+/** @var \Rougin\Authsum\Source\JwtParserInterface */
+$parser = /** ... */;
+
+$source = new JwtSource($parser);
+```
+
+If `JwtSource` is used as a source, the `username` field must be updated from `Authsum` class based on the query parameter where the token exists:
+
+``` php
+// index.php
+
+use Rougin\Authsum\Authsum;
+use Rougin\Authsum\Source\JwtSource;
+
+// ...
+
+$source = new JwtSource($parser);
+
+$auth = new Authsum($source);
+```
+
 ### Creating custom sources
 
 To create a custom source, kindly use the `SourceInterface` for its implementation:
@@ -194,14 +231,16 @@ interface SourceInterface
     /**
      * Checks if exists from the source.
      *
-     * @param string $username
-     * @param string $password
+     * @param string|null $username
+     * @param string|null $password
      *
      * @return boolean
      */
-    public function exists($username, $password);
+    public function exists($username = null, $password = null);
 }
 ```
+
+Both `$username` and `$password` variables can be `null` if a source does not accept any payload from the `Authsum` class (e.g., `JwtSource`).
 
 ## Changelog
 
