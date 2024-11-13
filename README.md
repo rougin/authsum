@@ -204,7 +204,25 @@ $parser = /** ... */;
 $source = new JwtSource($parser);
 ```
 
-If `JwtSource` is used as a source, the `username` field must be updated from `Authsum` class based on the query parameter where the token exists:
+From the example above, initializing `JwtSource` requires a `JwtParserInterface` for parsing the JSON web tokens from payload:
+
+``` php
+namespace Rougin\Authsum\Source;
+
+interface JwtParserInterface
+{
+    /**
+     * Parses the token string.
+     *
+     * @param string $token
+     *
+     * @return array<string, mixed>
+     */
+    public function parse($token);
+}
+```
+
+If `JwtSource` is used as a source, the `username` field must be updated also from the `Authsum` class based on the query parameter or parsed body where the token exists:
 
 ``` php
 // index.php
@@ -217,6 +235,10 @@ use Rougin\Authsum\Source\JwtSource;
 $source = new JwtSource($parser);
 
 $auth = new Authsum($source);
+
+// Search "token" property from the payload ---
+$auth->setUsername('token');
+// --------------------------------------------
 ```
 
 ### Creating custom sources
