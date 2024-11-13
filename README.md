@@ -231,16 +231,47 @@ interface SourceInterface
     /**
      * Checks if exists from the source.
      *
-     * @param string|null $username
-     * @param string|null $password
-     *
      * @return boolean
      */
-    public function exists($username = null, $password = null);
+    public function exists();
 }
 ```
 
-Both `$username` and `$password` variables can be `null` if a source does not accept any payload from the `Authsum` class (e.g., `JwtSource`).
+If the custom source requires an `username` field, kindly add the `WithUsername` interface:
+
+``` php
+namespace Rougin\Authsum\Source;
+
+interface WithUsername
+{
+    /**
+     * Sets the username.
+     *
+     * @param string $username
+     *
+     * @return self
+     */
+    public function setUsername($username);
+}
+```
+
+The `WithPassword` interface can be also added if the custom source requires a password to be defined:
+
+``` php
+namespace Rougin\Authsum\Source;
+
+interface WithPassword
+{
+    /**
+     * Sets the password.
+     *
+     * @param string $password
+     *
+     * @return self
+     */
+    public function setPassword($password);
+}
+```
 
 ## Changelog
 
