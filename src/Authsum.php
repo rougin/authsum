@@ -3,6 +3,8 @@
 namespace Rougin\Authsum;
 
 use Rougin\Authsum\Source\SourceInterface;
+use Rougin\Authsum\Source\WithPassword;
+use Rougin\Authsum\Source\WithUsername;
 
 /**
  * @package Authsum
@@ -12,9 +14,19 @@ use Rougin\Authsum\Source\SourceInterface;
 class Authsum
 {
     /**
+     * @var string
+     */
+    protected $password;
+
+    /**
      * @var \Rougin\Authsum\Source\SourceInterface
      */
     protected $source;
+
+    /**
+     * @var string
+     */
+    protected $username;
 
     /**
      * @param \Rougin\Authsum\Source\SourceInterface $source
@@ -22,6 +34,10 @@ class Authsum
     public function __construct(SourceInterface $source)
     {
         $this->source = $source;
+
+        $this->setPasswordField('password');
+
+        $this->setUsernameField('email');
     }
 
     /**
@@ -36,6 +52,16 @@ class Authsum
     }
 
     /**
+     * Gets the password field.
+     *
+     * @return string
+     */
+    public function getPasswordField()
+    {
+        return $this->password;
+    }
+
+    /**
      * Returns the result after validation.
      *
      * @return \Rougin\Authsum\Result
@@ -47,14 +73,13 @@ class Authsum
     }
 
     /**
-     * Executes if the validation failed.
+     * Gets the username field.
      *
-     * @param \Rougin\Authsum\Error $error
-     *
-     * @return void
+     * @return string
      */
-    protected function failed(Error $error)
+    public function getUsernameField()
     {
+        return $this->username;
     }
 
     /**
@@ -66,6 +91,20 @@ class Authsum
      */
     public function isValid($payload)
     {
+        if ($this->source instanceof WithUsername)
+        {
+            $username = $payload[$this->getUsernameField()];
+
+            $this->source->setUsername($username);
+        }
+
+        if ($this->source instanceof WithPassword)
+        {
+            $password = $payload[$this->getPasswordField()];
+
+            $this->source->setPassword($password);
+        }
+
         $valid = $this->source->isValid();
 
         if ($valid)
@@ -78,6 +117,45 @@ class Authsum
         }
 
         return $valid;
+    }
+
+    /**
+     * Sets the password field.
+     *
+     * @param string $password
+     *
+     * @return self
+     */
+    public function setPasswordField($password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Sets the username field.
+     *
+     * @param string $username
+     *
+     * @return self
+     */
+    public function setUsernameField($username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * Executes if the validation failed.
+     *
+     * @param \Rougin\Authsum\Error $error
+     *
+     * @return void
+     */
+    protected function failed(Error $error)
+    {
     }
 
     /**

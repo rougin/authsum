@@ -52,7 +52,7 @@ $auth = new Authsum($source);
 if ($auth->isValid($_POST))
 {
     /** @var \Acme\Models\User */
-    $user = $auth->getResult();
+    $user = $auth->getResult()->getField('user');
 
     echo 'Welcome ' . $user->getName() . '!';
 }
