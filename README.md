@@ -133,9 +133,7 @@ use Rougin\Authsum\Authsum;
 
 $auth = new Authsum($source);
 
-$valid = $auth->isValid($_POST);
-
-if ($valid)
+if ($auth->isValid($_POST))
 {
     $result = $auth->getResult();
 
@@ -150,13 +148,11 @@ else
 
     echo 'Error: ' . $auth->getText();
 }
-
-// ...
 ```
 
 ### Changing fields to check
 
-By default, `Authsum` checks the `email` as its username and `password` for the password from the payload (e.g., `$_POST`). If this is not the case, kindly update the specified fields using `setUsernameField` or `setPasswordField`:
+By default, the `Authsum` class can check the `email` as its username and `password` for the password from the payload (e.g., `$_POST`). If this is not the case, kindly update the specified fields using `setUsernameField` or `setPasswordField`:
 
 ``` php
 // index.php
@@ -170,11 +166,11 @@ $auth->setPasswordField('password');
 ```
 
 > [!NOTE]
-> The specified fields will be used if they are required by the specified source (e.g., `BasicSource`, `PdoSource`).
+> The specified fields will be used by the `Authsum` class if they are required by the specified source (e.g., `BasicSource`, `PdoSource`).
 
 ### Using sources
 
-Sources in `Authsum` are PHP classes that provide user data. They are also used for checking the specified username and password fields against its data source:
+Sources in `Authsum` are PHP classes that provide user data. They can be used for checking the specified username and password fields against its data source:
 
 ``` php
 // index.php
