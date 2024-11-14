@@ -18,7 +18,7 @@ $ composer require rougin/authsum
 
 ## Basic usage
 
-Prior in using `Authsum`, a data source must be defined first (e.g, `BasicSource`):
+Prior in using `Authsum`, a data source must be defined first (e.g., `BasicSource`):
 
 ``` php
 // index.php
