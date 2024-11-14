@@ -150,6 +150,9 @@ else
 }
 ```
 
+> [!NOTE]
+> An `UnexpectedValueException` will be thrown if trying to access an empty output (e.g., trying to access `getResult()` after the failed validation).
+
 ### Changing fields to check
 
 By default, the `Authsum` class can check the `email` as its username and `password` for the password from the payload (e.g., `$_POST`). If this is not the case, kindly update the specified fields using `setUsernameField` or `setPasswordField`:

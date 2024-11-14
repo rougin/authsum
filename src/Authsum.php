@@ -5,6 +5,7 @@ namespace Rougin\Authsum;
 use Rougin\Authsum\Source\SourceInterface;
 use Rougin\Authsum\Source\WithPassword;
 use Rougin\Authsum\Source\WithUsername;
+use UnexpectedValueException;
 
 /**
  * @package Authsum
@@ -17,6 +18,11 @@ class Authsum
      * @var string
      */
     protected $password;
+
+    /**
+     * @var array<string, string>
+     */
+    protected $payload = array();
 
     /**
      * @var \Rougin\Authsum\Source\SourceInterface
@@ -62,6 +68,26 @@ class Authsum
     }
 
     /**
+     * Gets the password value.
+     *
+     * @return string
+     * @throws \UnexpectedValueException
+     */
+    public function getPasswordValue()
+    {
+        $field = $this->getPasswordField();
+
+        if (! array_key_exists($field, $this->payload))
+        {
+            $text = 'Field "' . $field . '" is not found from payload';
+
+            throw new UnexpectedValueException($text);
+        }
+
+        return $this->payload[$field];
+    }
+
+    /**
      * Returns the result after validation.
      *
      * @return \Rougin\Authsum\Result
@@ -83,6 +109,26 @@ class Authsum
     }
 
     /**
+     * Gets the username value.
+     *
+     * @return string
+     * @throws \UnexpectedValueException
+     */
+    public function getUsernameValue()
+    {
+        $field = $this->getUsernameField();
+
+        if (! array_key_exists($field, $this->payload))
+        {
+            $text = 'Field "' . $field . '" is not found from payload';
+
+            throw new UnexpectedValueException($text);
+        }
+
+        return $this->payload[$field];
+    }
+
+    /**
      * Checks if the payload exists from the source.
      *
      * @param array<string, string> $payload
@@ -91,18 +137,16 @@ class Authsum
      */
     public function isValid($payload)
     {
+        $this->payload = $payload;
+
         if ($this->source instanceof WithUsername)
         {
-            $username = $payload[$this->getUsernameField()];
-
-            $this->source->setUsername($username);
+            $this->source->setUsername($this->getUsernameValue());
         }
 
         if ($this->source instanceof WithPassword)
         {
-            $password = $payload[$this->getPasswordField()];
-
-            $this->source->setPassword($password);
+            $this->source->setPassword($this->getPasswordValue());
         }
 
         $valid = $this->source->isValid();
