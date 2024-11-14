@@ -277,7 +277,7 @@ SELECT u.* FROM users u WHERE u.username = ? AND u.type = ?
 
 #### `JwtSource`
 
-The `JwtSource` class is a special class checks the authentication of a user using [JSON Web Token](https://en.wikipedia.org/wiki/JSON_Web_Token):
+The `JwtSource` class is a special class that checks a user's authentication using [JSON Web Token](https://en.wikipedia.org/wiki/JSON_Web_Token):
 
 ``` php
 // index.php
