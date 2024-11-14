@@ -51,7 +51,8 @@ $auth = new Authsum($source);
 
 if ($auth->isValid($_POST))
 {
-    $user = $auth->getUser();
+    /** @var \Acme\Models\User */
+    $user = $auth->getResult();
 
     echo 'Welcome ' . $user->getName() . '!';
 }
@@ -63,7 +64,95 @@ else
 
 ## Customization
 
-`Authsum` also provides simple extensibility utilities to fit in from various use-cases.
+`Authsum` also provides simple extensibility utilities to be able to fit in from various use-cases.
+
+### Pass or fail from `Authsum`
+
+The `Authsum` class can also be extended to provide methods if the validation logic passed or failed:
+
+``` php
+namespace Acme;
+
+use Acme\Depots\AuditDepot;
+use Acme\Errors\NoAccount;
+use Rougin\Authsum\Authsum;
+use Rougin\Authsum\Error;
+use Rougin\Authsum\Result;
+
+class TestAuth extends Authsum
+{
+    protected $audit;
+
+    public function __construct(AuditDepot $audit)
+    {
+        $this->audit = $audit;
+    }
+
+    /**
+     * Executes if the validation failed.
+     *
+     * @param \Rougin\Authsum\Error $error
+     *
+     * @return void
+     */
+    protected function failed(Error $error)
+    {
+        /** @var string */
+        $user = $error->getField('name');
+
+        $this->audit->userInvalid($user);
+
+        throw new NoAccount($error->getText());
+    }
+
+    /**
+     * Executes if the validation passed.
+     *
+     * @param \Rougin\Authsum\Result $data
+     *
+     * @return void
+     */
+    protected function passed(Result $data)
+    {
+        /** @var string */
+        $user = $data->getField('name');
+
+        $this->audit->userLoggedIn($user);
+    }
+}
+```
+
+Alternatively, the `Authsum` class can also get the error or the result after validation using `getError()` and `getResult()` respectively:
+
+``` php
+// index.php
+
+use Rougin\Authsum\Authsum;
+
+// ...
+
+$auth = new Authsum($source);
+
+$valid = $auth->isValid($_POST);
+
+if ($valid)
+{
+    $result = $auth->getResult();
+
+    /** @var string */
+    $name = $result->getField('name');
+
+    echo 'Welcome ' . $name . '!';
+}
+else
+{
+    $error = $auth->getError();
+
+    echo 'Error: ' . $auth->getText();
+}
+
+// ...
+```
 
 ### Changing fields to check
 
@@ -79,6 +168,9 @@ $auth->setPasswordField('password');
 
 // ...
 ```
+
+> [!NOTE]
+> The specified fields will be used if they are required by the specified source (e.g., `BasicSource`, `PdoSource`).
 
 ### Using sources
 
@@ -251,11 +343,25 @@ namespace Rougin\Authsum\Source;
 interface SourceInterface
 {
     /**
-     * Checks if exists from the source.
+     * Returns the error after validation.
+     *
+     * @return \Rougin\Authsum\Error
+     */
+    public function getError();
+
+    /**
+     * Returns the result after validation.
+     *
+     * @return \Rougin\Authsum\Result
+     */
+    public function getResult();
+
+    /**
+     * Checks if it exists from the source.
      *
      * @return boolean
      */
-    public function exists();
+    public function isValid();
 }
 ```
 
