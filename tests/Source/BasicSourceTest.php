@@ -56,7 +56,7 @@ class BasicSourceTest extends Testcase
      */
     public function test_invalid_without_result()
     {
-        $this->expectExceptionMessage('Validation failed');
+        $this->doExpectExceptionMessage('Validation failed');
 
         $payload = array('email' => 'me@roug.in');
 
@@ -92,7 +92,7 @@ class BasicSourceTest extends Testcase
      */
     public function test_valid_without_error()
     {
-        $this->expectExceptionMessage('Validation passed');
+        $this->doExpectExceptionMessage('Validation passed');
 
         $payload = array();
 

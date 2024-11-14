@@ -33,7 +33,7 @@ class ResultTest extends Testcase
     {
         $expected = 'Field "age" not found';
 
-        $this->expectExceptionMessage($expected);
+        $this->doExpectExceptionMessage($expected);
 
         $result = new Result;
 
