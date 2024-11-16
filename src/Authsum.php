@@ -17,7 +17,7 @@ class Authsum
     /**
      * @var string
      */
-    protected $password;
+    protected $password = 'password';
 
     /**
      * @var array<string, string>
@@ -32,7 +32,7 @@ class Authsum
     /**
      * @var string
      */
-    protected $username;
+    protected $username = 'email';
 
     /**
      * @param \Rougin\Authsum\Source\SourceInterface $source
@@ -40,10 +40,6 @@ class Authsum
     public function __construct(SourceInterface $source)
     {
         $this->source = $source;
-
-        $this->setPasswordField('password');
-
-        $this->setUsernameField('email');
     }
 
     /**

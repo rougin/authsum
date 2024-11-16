@@ -28,6 +28,28 @@ class AuthsumTest extends Testcase
     /**
      * @return void
      */
+    public function test_change_payload_fields()
+    {
+        $expected = 'Credentials matched!';
+
+        $auth = new Authsum($this->source);
+
+        $auth->setUsernameField('username');
+
+        $auth->setPasswordField('pass');
+
+        $payload = array('username' => 'hello', 'pass' => 'olleh');
+
+        $valid = $auth->isValid($payload);
+
+        $actual = $auth->getResult()->getText();
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @return void
+     */
     public function test_failed_event()
     {
         $expected = 'Invalid credentials given';
