@@ -299,7 +299,7 @@ interface JwtParserInterface
 }
 ```
 
-If `JwtSource` is used as a source, the `username` field must be updated also from the `Authsum` class based on the query parameter or parsed body where the token exists:
+If `JwtSource` is used as a source, the `token` field must be updated also from the `Authsum` class based on the query parameter or parsed body where the token exists:
 
 ``` php
 // index.php
@@ -311,11 +311,35 @@ use Rougin\Authsum\Source\JwtSource;
 
 $source = new JwtSource($parser);
 
+// Search "token" property from the payload ---
+$source->setTokenField('token');
+// --------------------------------------------
+
+$auth = new Authsum($source);
+```
+
+> [!NOTE]
+> If `setTokenField` is not specified, its default value is `token`.
+
+Then use the `setUsernameField` to specify the field to be compared against the parsed data from the JSON web token:
+
+``` php
+// index.php
+
+use Rougin\Authsum\Authsum;
+
+// ...
+
 $auth = new Authsum($source);
 
-// Search "token" property from the payload ---
-$auth->setUsername('token');
-// --------------------------------------------
+// ...
+
+$auth->setUsernameField('email');
+
+// The $_POST data should contains the ---
+// "token" field and the "email" field ---
+$valid = $auth->isValid($_POST);
+// ---------------------------------------
 ```
 
 ### Creating custom sources
@@ -401,6 +425,24 @@ interface WithPassword
      * @return self
      */
     public function setPasswordValue($password);
+}
+```
+
+Some custom sources may require to use the provided payload instead of `username` and `password` fields (e.g., `JwtSource`). With this, kindly use the `WithPayload` interface:
+
+``` php
+namespace Rougin\Authsum\Source;
+
+interface WithPayload
+{
+    /**
+     * Sets the prepared payload.
+     *
+     * @param array<string, string> $payload
+     *
+     * @return self
+     */
+    public function setPayload($payload);
 }
 ```
 

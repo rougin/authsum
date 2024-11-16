@@ -4,6 +4,7 @@ namespace Rougin\Authsum;
 
 use Rougin\Authsum\Source\SourceInterface;
 use Rougin\Authsum\Source\WithPassword;
+use Rougin\Authsum\Source\WithPayload;
 use Rougin\Authsum\Source\WithUsername;
 use UnexpectedValueException;
 
@@ -135,18 +136,23 @@ class Authsum
     {
         $this->payload = $payload;
 
-        if ($this->source instanceof WithUsername)
-        {
-            $this->source->setUsernameField($this->getUsernameField());
-
-            $this->source->setUsernameValue($this->getUsernameValue());
-        }
-
         if ($this->source instanceof WithPassword)
         {
             $this->source->setPasswordField($this->getPasswordField());
 
             $this->source->setPasswordValue($this->getPasswordValue());
+        }
+
+        if ($this->source instanceof WithPayload)
+        {
+            $this->source->setPayload($this->payload);
+        }
+
+        if ($this->source instanceof WithUsername)
+        {
+            $this->source->setUsernameField($this->getUsernameField());
+
+            $this->source->setUsernameValue($this->getUsernameValue());
         }
 
         $valid = $this->source->isValid();
