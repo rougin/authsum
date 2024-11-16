@@ -262,6 +262,8 @@ $source->withoutHash();
 // ...
 ```
 
+Doing this will make a strict comparison of the provided `password` against the result from the database.
+
 #### `JwtSource`
 
 The `JwtSource` class is a special class that checks a user's authentication using [JSON Web Token](https://en.wikipedia.org/wiki/JSON_Web_Token):
