@@ -372,13 +372,22 @@ namespace Rougin\Authsum\Source;
 interface WithUsername
 {
     /**
+     * Sets the username field.
+     *
+     * @param string $username
+     *
+     * @return self
+     */
+    public function setUsernameField($username);
+
+    /**
      * Sets the username.
      *
      * @param string $username
      *
      * @return self
      */
-    public function setUsername($username);
+    public function setUsernameValue($username);
 }
 ```
 
@@ -390,13 +399,22 @@ namespace Rougin\Authsum\Source;
 interface WithPassword
 {
     /**
-     * Sets the password.
+     * Sets the password field.
      *
      * @param string $password
      *
      * @return self
      */
-    public function setPassword($password);
+    public function setPasswordField($password);
+
+    /**
+     * Sets the password value.
+     *
+     * @param string $password
+     *
+     * @return self
+     */
+    public function setPasswordValue($password);
 }
 ```
 

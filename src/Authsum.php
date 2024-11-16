@@ -17,7 +17,7 @@ class Authsum
     /**
      * @var string
      */
-    protected $password = 'password';
+    protected $passwordField = 'password';
 
     /**
      * @var array<string, string>
@@ -32,7 +32,7 @@ class Authsum
     /**
      * @var string
      */
-    protected $username = 'email';
+    protected $usernameField = 'email';
 
     /**
      * @param \Rougin\Authsum\Source\SourceInterface $source
@@ -54,17 +54,17 @@ class Authsum
     }
 
     /**
-     * Gets the password field.
+     * Returns the password field.
      *
      * @return string
      */
     public function getPasswordField()
     {
-        return $this->password;
+        return $this->passwordField;
     }
 
     /**
-     * Gets the password value.
+     * Returns the password value.
      *
      * @return string
      * @throws \UnexpectedValueException
@@ -95,17 +95,17 @@ class Authsum
     }
 
     /**
-     * Gets the username field.
+     * Returns the username field.
      *
      * @return string
      */
     public function getUsernameField()
     {
-        return $this->username;
+        return $this->usernameField;
     }
 
     /**
-     * Gets the username value.
+     * Returns the username value.
      *
      * @return string
      * @throws \UnexpectedValueException
@@ -137,12 +137,16 @@ class Authsum
 
         if ($this->source instanceof WithUsername)
         {
-            $this->source->setUsername($this->getUsernameValue());
+            $this->source->setUsernameField($this->getUsernameField());
+
+            $this->source->setUsernameValue($this->getUsernameValue());
         }
 
         if ($this->source instanceof WithPassword)
         {
-            $this->source->setPassword($this->getPasswordValue());
+            $this->source->setPasswordField($this->getPasswordField());
+
+            $this->source->setPasswordValue($this->getPasswordValue());
         }
 
         $valid = $this->source->isValid();
@@ -168,7 +172,7 @@ class Authsum
      */
     public function setPasswordField($password)
     {
-        $this->password = $password;
+        $this->passwordField = $password;
 
         return $this;
     }
@@ -182,7 +186,7 @@ class Authsum
      */
     public function setUsernameField($username)
     {
-        $this->username = $username;
+        $this->usernameField = $username;
 
         return $this;
     }

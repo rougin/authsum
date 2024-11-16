@@ -16,17 +16,32 @@ class BasicSource extends Source implements WithUsername, WithPassword
     /**
      * @var string
      */
-    protected $password;
-
-    /**
-     * @var array<string, string>
-     */
-    protected $payload = array();
+    protected $passwordField = 'password';
 
     /**
      * @var string
      */
-    protected $username;
+    protected $passwordValue;
+
+    /**
+     * @var string
+     */
+    protected $sourcePassword;
+
+    /**
+     * @var string
+     */
+    protected $sourceUsername;
+
+    /**
+     * @var string
+     */
+    protected $usernameField = 'username';
+
+    /**
+     * @var string
+     */
+    protected $usernameValue;
 
     /**
      * @param string $username
@@ -34,9 +49,9 @@ class BasicSource extends Source implements WithUsername, WithPassword
      */
     public function __construct($username, $password)
     {
-        $this->username = $username;
+        $this->sourceUsername = $username;
 
-        $this->password = $password;
+        $this->sourcePassword = $password;
     }
 
     /**
@@ -46,56 +61,82 @@ class BasicSource extends Source implements WithUsername, WithPassword
      */
     public function isValid()
     {
-        $sameUsername = $this->payload['username'] === $this->username;
+        $sameUsername = $this->sourceUsername === $this->usernameValue;
 
-        $samePassword = $this->payload['password'] === $this->password;
+        $samePassword = $this->sourcePassword === $this->passwordValue;
 
-        $valid = $sameUsername && $samePassword;
-
-        if ($valid)
+        if ($sameUsername && $samePassword)
         {
             $result = new Result;
 
             $result->setText('Credentials matched!');
 
             $this->result = $result;
-        }
-        else
-        {
-            $error = new Error;
 
-            $error->setText('Invalid credentials given.');
-
-            $this->error = $error;
+            return true;
         }
 
-        return $valid;
+        $error = new Error;
+
+        $error->setText('Invalid credentials given.');
+
+        $this->error = $error;
+
+        return false;
     }
 
     /**
-     * Sets the password.
+     * Sets the password field.
      *
      * @param string $password
      *
      * @return self
      */
-    public function setPassword($password)
+    public function setPasswordField($password)
     {
-        $this->payload['password'] = $password;
+        $this->passwordField = $password;
 
         return $this;
     }
 
     /**
-     * Sets the username.
+     * Sets the password value.
+     *
+     * @param string $password
+     *
+     * @return self
+     */
+    public function setPasswordValue($password)
+    {
+        $this->passwordValue = $password;
+
+        return $this;
+    }
+
+    /**
+     * Sets the username field.
      *
      * @param string $username
      *
      * @return self
      */
-    public function setUsername($username)
+    public function setUsernameField($username)
     {
-        $this->payload['username'] = $username;
+        $this->usernameField = $username;
+
+        return $this;
+    }
+
+    /**
+     * Sets the username value.
+     *
+     * @param string $username
+     *
+     * @return self
+     */
+    public function setUsernameValue($username)
+    {
+        $this->usernameValue = $username;
 
         return $this;
     }

@@ -10,11 +10,20 @@ namespace Rougin\Authsum\Source;
 interface WithUsername
 {
     /**
+     * Sets the username field.
+     *
+     * @param string $username
+     *
+     * @return self
+     */
+    public function setUsernameField($username);
+
+    /**
      * Sets the username.
      *
      * @param string $username
      *
      * @return self
      */
-    public function setUsername($username);
+    public function setUsernameValue($username);
 }
