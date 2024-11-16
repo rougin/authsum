@@ -246,7 +246,7 @@ $source->setTableName('users');
 > [!NOTE]
 > If the `setTableName` is not specified, it always refer to the `users` table.
 
-There may be a scenario that there are other fields to use besides `username` and `password`. With this, kindly use the `setData` method:
+When using `PdoSource`, the value in the `password` field will be assumed as a hash (e.g., `$2y$10...`). If this is not the case, kindly add the `withoutHash` method:
 
 ``` php
 // index.php
@@ -257,25 +257,9 @@ use Rougin\Authsum\Source\PdoSource;
 
 $source = new PdoSource($pdo);
 
-$data = array('type' => 'admin');
-
-$source->setData($data);
+$source->withoutHash();
 
 // ...
-```
-
-If `setData` is defined, the provided data will be added as `WHERE` queries to the SQL query:
-
-**Before**
-
-``` sql
-SELECT u.* FROM users u WHERE u.username = ?
-```
-
-**After**
-
-``` sql
-SELECT u.* FROM users u WHERE u.username = ? AND u.type = ?
 ```
 
 #### `JwtSource`

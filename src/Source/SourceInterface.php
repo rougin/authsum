@@ -9,6 +9,10 @@ namespace Rougin\Authsum\Source;
  */
 interface SourceInterface
 {
+    const CREDENTIALS_MATCHED = 'Credentials matched!';
+
+    const CREDENTIALS_INVALID = 'Invalid credentials given.';
+
     /**
      * Returns the error after validation.
      *

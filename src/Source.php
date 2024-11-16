@@ -53,4 +53,36 @@ abstract class Source implements SourceInterface
 
         return $this->result;
     }
+
+    /**
+     * @param string $text
+     *
+     * @return boolean
+     */
+    protected function setError($text = self::CREDENTIALS_INVALID)
+    {
+        $error = new Error;
+
+        $error->setText($text);
+
+        $this->error = $error;
+
+        return false;
+    }
+
+    /**
+     * @param string $text
+     *
+     * @return boolean
+     */
+    protected function setResult($text = self::CREDENTIALS_MATCHED)
+    {
+        $result = new Result;
+
+        $result->setText($text);
+
+        $this->result = $result;
+
+        return true;
+    }
 }

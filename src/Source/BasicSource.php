@@ -2,8 +2,6 @@
 
 namespace Rougin\Authsum\Source;
 
-use Rougin\Authsum\Error;
-use Rougin\Authsum\Result;
 use Rougin\Authsum\Source;
 
 /**
@@ -61,28 +59,16 @@ class BasicSource extends Source implements WithUsername, WithPassword
      */
     public function isValid()
     {
-        $sameUsername = $this->sourceUsername === $this->usernameValue;
+        $sameUser = $this->sourceUsername === $this->usernameValue;
 
-        $samePassword = $this->sourcePassword === $this->passwordValue;
+        $samePass = $this->sourcePassword === $this->passwordValue;
 
-        if ($sameUsername && $samePassword)
+        if ($sameUser && $samePass)
         {
-            $result = new Result;
-
-            $result->setText('Credentials matched!');
-
-            $this->result = $result;
-
-            return true;
+            return $this->setResult();
         }
 
-        $error = new Error;
-
-        $error->setText('Invalid credentials given.');
-
-        $this->error = $error;
-
-        return false;
+        return $this->setError();
     }
 
     /**
