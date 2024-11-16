@@ -97,11 +97,6 @@ class TestAuth extends Authsum
      */
     protected function failed(Error $error)
     {
-        /** @var string */
-        $user = $error->getField('name');
-
-        $this->audit->userInvalid($user);
-
         throw new NoAccount($error->getText());
     }
 
