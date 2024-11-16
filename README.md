@@ -472,4 +472,3 @@ The MIT License (MIT). Please see [LICENSE][link-license] for more information.
 [link-downloads]: https://packagist.org/packages/rougin/authsum
 [link-license]: https://github.com/rougin/authsum/blob/master/LICENSE.md
 [link-packagist]: https://packagist.org/packages/rougin/authsum
-[link-upgrading]: https://github.com/rougin/authsum/blob/master/UPGRADING.md
