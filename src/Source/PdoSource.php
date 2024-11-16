@@ -2,7 +2,6 @@
 
 namespace Rougin\Authsum\Source;
 
-use Rougin\Authsum\Error;
 use Rougin\Authsum\Source;
 
 /**
@@ -64,50 +63,23 @@ class PdoSource extends Source implements WithUsername, WithPassword
      */
     public function isValid()
     {
-        $username = $this->usernameField;
-
-        $table = $this->table;
-
-        $query = "SELECT * FROM $table WHERE $username = ?";
-
-        $error = new Error;
-
         try
         {
-            /** @var \PDOStatement */
-            $stmt = $this->pdo->prepare($query);
-
-            $stmt->execute(array($this->usernameValue));
-
-            /** @var array<string, string> */
-            $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $row = $this->runQuery();
         }
         catch (\Exception $e)
         {
             return $this->setError($e->getMessage());
         }
 
-        $hash = $row[$this->passwordField];
+        $sameUser = $row[$this->usernameField] === $this->usernameValue;
 
-        $value = $this->passwordValue;
-
-        $samePass = password_verify($value, $hash);
-
-        if (! $this->withHash)
+        if (! $sameUser || ! $this->samePass($row))
         {
-            $samePass = $row[$this->passwordField] === $value;
+            return $this->setError();
         }
 
-        $value = $this->usernameValue;
-
-        $sameUser = $row[$this->usernameField] === $value;
-
-        if ($sameUser && $samePass)
-        {
-            return $this->setResult();
-        }
-
-        return $this->setError();
+        return $this->setResult();
     }
 
     /**
@@ -188,5 +160,45 @@ class PdoSource extends Source implements WithUsername, WithPassword
         $this->withHash = false;
 
         return $this;
+    }
+
+    /**
+     * @return array<string, string>
+     * @throws \PDOException
+     */
+    protected function runQuery()
+    {
+        $username = $this->usernameField;
+
+        $table = $this->table;
+
+        $query = "SELECT * FROM $table WHERE $username = ?";
+
+        /** @var \PDOStatement */
+        $stmt = $this->pdo->prepare($query);
+
+        $stmt->execute(array($this->usernameValue));
+
+        /** @var array<string, string> */
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @param array<string, string> $row
+     *
+     * @return boolean
+     */
+    protected function samePass($row)
+    {
+        $hash = $row[$this->passwordField];
+
+        $same = password_verify($this->passwordValue, $hash);
+
+        if (! $this->withHash)
+        {
+            $same = $row[$this->passwordField] === $this->passwordValue;
+        }
+
+        return $same;
     }
 }
