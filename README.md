@@ -477,10 +477,10 @@ When creating fixes or implementing new features, it is recommended to run the a
 To retain the code quality of `Authsum`, a static code analysis code tool named [PHPStan](https://phpstan.org/) is being used during development. To start, kindly install the specified package in global environment of `Composer`:
 
 ``` bash
-$ composer global require phpstan/phpstan
+$ composer global require phpstan/phpstan --dev
 ```
 
-Once installed, `PHPStan` can now be run using the `phpstan` command:
+Once installed, `PHPStan` can now be run using its namesake command:
 
 ``` bash
 $ cd Sample
@@ -489,10 +489,10 @@ $ phpstan
 
 ### Coding style
 
-Asides from code quality, `Authsum` also uses a tool named [PHP Coding Standards Fixer](https://cs.symfony.com/) for maintaining an opinionated style guide. The said tool needs also to be installed in the global environment of `Composer`:
+Asides from code quality, `Authsum` also uses a tool named [PHP Coding Standards Fixer](https://cs.symfony.com/) for maintaining an opinionated style guide. The said tool needs also to be installed in the `Composer`'s global environment:
 
 ``` bash
-$ composer global require friendsofphp/php-cs-fixer
+$ composer global require friendsofphp/php-cs-fixer --dev
 ```
 
 After being installed, use the `php-cs-fixer` command in the same `Authsum` directory:
