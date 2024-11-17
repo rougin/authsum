@@ -487,9 +487,6 @@ $ cd Sample
 $ phpstan
 ```
 
-> [!NOTE]
-> Installing `PHPStan` requires a PHP version `7.4` onwards.
-
 ### Coding style
 
 Asides from code quality, `Authsum` also uses a tool named [PHP Coding Standards Fixer](https://cs.symfony.com/) for maintaining an opinionated style guide. The said tool needs also to be installed in the global environment of `Composer`:
@@ -505,6 +502,9 @@ $ php-cs-fixer fix --config=phpstyle.php
 ```
 
 The specified `phpstyle.php` currently follows the [PSR-12](https://www.php-fig.org/psr/psr-12/) as the baseline of the coding style and uses [Allman](https://en.wikipedia.org/wiki/Indentation_style#Allman_style) as its indentation style.
+
+> [!NOTE]
+> Installing `PHPStan` and `PHP Coding Standards Fixer` requires a version of PHP that is `7.4` and above.
 
 ## License
 
