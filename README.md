@@ -498,6 +498,7 @@ $ composer global require friendsofphp/php-cs-fixer
 After being installed, use the `php-cs-fixer` command in the same `Authsum` directory:
 
 ``` bash
+$ cd Sample
 $ php-cs-fixer fix --config=phpstyle.php
 ```
 
