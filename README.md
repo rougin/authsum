@@ -446,7 +446,7 @@ interface WithPayload
 If there is a need to check the source code of `Authsum` for development purposes (e.g., creating fixes, new features, etc.), kindly clone this repository first to a local machine:
 
 ``` bash
-$ https://github.com/rougin/authsum.git "Sample"
+$ git clone https://github.com/rougin/authsum.git "Sample"
 ```
 
 After cloning, use `Composer` to install its required packages:
@@ -456,7 +456,10 @@ $ cd Sample
 $ composer update
 ```
 
-Once the packages were installed, kindly check the following below on how to maintain the code quality and styling guide when interacting the source code of `Authsum`:
+> [!NOTE]
+> Please see also the [build.yml](https://github.com/rougin/authsum/blob/master/.github/workflows/build.yml) of `Authsum` to check any packages that needs to be installed based on the PHP version.
+
+Once the required packages were installed, kindly check the following below on how to maintain the code quality and styling guide when interacting the source code of `Authsum`:
 
 ### Unit tests
 
