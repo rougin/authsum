@@ -441,7 +441,7 @@ interface WithPayload
 }
 ```
 
-## Change log
+## Changelog
 
 Please see [CHANGELOG][link-changelog] for more recent changes.
 
